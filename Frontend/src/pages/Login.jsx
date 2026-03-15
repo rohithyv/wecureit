@@ -2,67 +2,26 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
-
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('patient')
   const [error, setError] = useState('')
   const { login } = useAuth()
-  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault()
-  //   setError('')
-  //   const result = login(email, password, role)
-  //   if (result.error) {
-  //     setError(result.error)
-  //     return
-  //   }
-  //   if (role === 'admin') navigate('/admin')
-  //   else if (role === 'doctor') navigate('/doctor')
-  //   else navigate('/patient')
-  // }
-
-
-  const handleSubmit = async (e) => {
-  e.preventDefault()
-  setError('')
-  setLoading(true)
-
-
-  try {
-    const response = await fetch('http://localhost:8080/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, role })
-    })
-
-
-    const data = await response.json()
-
-
-    if (response.ok) {
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('user', JSON.stringify(data))
-      login(data)
-      
-      if (role === 'admin') navigate('/admin')
-      else if (role === 'doctor') navigate('/doctor')
-      else navigate('/patient')
-    } else {
-      setError(data.message || 'Login failed')
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setError('')
+    const result = login(email, password, role)
+    if (result.error) {
+      setError(result.error)
+      return
     }
-  } catch (err) {
-    setError('Backend not running')
-  } finally {
-    setLoading(false)
+    if (role === 'admin') navigate('/admin')
+    else if (role === 'doctor') navigate('/doctor')
+    else navigate('/patient')
   }
-}
-
-
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 bg-[#f8fafc]">
@@ -79,8 +38,7 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Role</label>
-            {/* <select value={role} onChange={(e) => setRole(e.target.value)} className="input-field"> */}
-            <select value={role} onChange={(e) => setRole(e.target.value)} className="input-field" disabled={loading}>
+            <select value={role} onChange={(e) => setRole(e.target.value)} className="input-field">
               <option value="patient">Patient</option>
               <option value="doctor">Doctor</option>
               <option value="admin">Admin</option>
@@ -88,39 +46,20 @@ export default function Login() {
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-            {/* <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" placeholder="you@example.com" required /> */}
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" placeholder="you@example.com" required disabled={loading} />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" placeholder="you@example.com" required />
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
-            {/* <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" required /> */}
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" required disabled={loading} />
-            
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" required />
           </div>
-          {/* {error && <p className="text-red-600 text-sm">{error}</p>} */}
-          {error && (
-  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
-    {error}
-  </div>
-)}
-
-
-          {/* <button type="submit" className="btn-primary w-full">Sign in</button> */}
-          <button 
-  type="submit" 
-  disabled={loading}
-  className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
->
-  {loading ? 'Signing in...' : 'Sign in'}
-</button>
-
-
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+          <button type="submit" className="btn-primary w-full">Sign in</button>
         </form>
         <p className="mt-6 text-center text-slate-600 text-sm">
           Don't have an account? <Link to="/register" className="text-primary-700 font-medium">Register</Link>
         </p>
         <p className="mt-2 text-center text-slate-500 text-xs">
-          Demo: [patient@test.com](mailto:patient@test.com) / 123456 (Patient), [doctor@test.com](mailto:doctor@test.com) / 123456 (Doctor). Admin: [wecureIT@gwuproject.com](mailto:wecureIT@gwuproject.com) / wecureIT (Admin only).
+          Demo: patient@test.com / 123456 (Patient), doctor@test.com / 123456 (Doctor). Admin: wecureIT@gwuproject.com / wecureIT (Admin only).
         </p>
       </div>
     </div>
