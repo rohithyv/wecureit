@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#f8fafc] text-slate-800 font-sans antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium px-4 py-2.5 rounded-lg transition-colors shadow-pharma;
+  }
+  .btn-secondary {
+    @apply bg-white border border-slate-200 hover:border-primary-500/50 hover:bg-primary-50/50 text-slate-700 font-medium px-4 py-2.5 rounded-lg transition-colors shadow-pharma;
+  }
+  .card {
+    @apply bg-white rounded-xl border border-slate-200/90 shadow-pharma overflow-hidden;
+  }
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/15 outline-none transition bg-white;
+  }
+}
